@@ -30,7 +30,7 @@ jobs:
           docker load < result
 
       - name: Rename image
-        run: docker tag svarozhits:latest Raroh73/svarozhits:latest
+        run: docker tag svarozhits:latest raroh73/svarozhits:latest
 
       - name: Push image
-        run: docker push Raroh73/svarozhits:latest
+        run: docker push raroh73/svarozhits:latest
