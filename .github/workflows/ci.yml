@@ -1,36 +1,34 @@
 name: CI/CD
-
 on:
   push:
     branches:
       - main
-
 jobs:
-  deploy:
-    name: Build docker
+  docker:
     runs-on: ubuntu-latest
-
+    permissions:
+      packages: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
       - name: Setup Nix
         uses: cachix/install-nix-action@v17
-
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v10
+        with:
+          name: svarozhits
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build image
         run: |
           nix build .#docker-image-arm64
           docker load < result
-
       - name: Rename image
         run: docker tag svarozhits:latest ghcr.io/raroh73/svarozhits:latest
-
       - name: Push image
         run: docker push ghcr.io/raroh73/svarozhits:latest
