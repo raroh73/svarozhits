@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "priority: low"
+      - "scope: dependency"
+      - "scope: github-action"
+      - "status: new"
+      - "type: chore"
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "priority: low"
+      - "scope: dependency"
+      - "scope: cargo"
+      - "status: new"
+      - "type: chore"
