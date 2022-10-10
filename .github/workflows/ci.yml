@@ -24,11 +24,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build image
+      - name: Build images
         run: |
-          nix build .#docker-image-arm64
-          docker load < result
-      - name: Rename image
-        run: docker tag svarozhits:latest ghcr.io/raroh73/svarozhits:latest
+          nix build .#docker-image-amd64 .#docker-image-arm64
+          ls -1 result* | xargs --no-run-if-empty -L 1 docker load -i
       - name: Push image
-        run: docker push ghcr.io/raroh73/svarozhits:latest
+        run: docker image push --all-tags ghcr.io/raroh73/svarozhits
+      - name: Push manifest
+        run: |
+          docker manifest create ghcr.io/raroh73/svarozhits:latest \
+          --amend ghcr.io/raroh73/svarozhits:amd64 \
+          --amend ghcr.io/raroh73/svarozhits:arm64
+          docker manifest push ghcr.io/raroh73/svarozhits:latest
