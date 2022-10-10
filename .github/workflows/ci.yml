@@ -33,4 +33,4 @@ jobs:
         run: docker tag svarozhits:latest raroh73/svarozhits:latest
 
       - name: Push image
-        run: docker push raroh73/svarozhits:latest
+        run: docker push ghcr.io/raroh73/svarozhits:latest
