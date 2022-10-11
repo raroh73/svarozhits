@@ -24,8 +24,10 @@
 
         toolchain = with fenix.packages.${system};
           combine [
-            minimal.rustc
-            minimal.cargo
+            default.rustc
+            default.cargo
+            default.clippy
+            default.rustfmt
             targets.x86_64-unknown-linux-gnu.latest.rust-std
             targets.aarch64-unknown-linux-gnu.latest.rust-std
           ];
@@ -53,6 +55,11 @@
         packages.x86_64-unknown-linux-gnu = naerskBuildPackage "x86_64-unknown-linux-gnu" {
           src = ./.;
           doCheck = true;
+          cargoTestCommands = tests: [
+            ''cargo clippy -- -D warnings''
+            ''cargo fmt --all -- --check''
+            ''cargo test''
+          ];
         };
 
         packages.aarch64-unknown-linux-gnu = naerskBuildPackage "aarch64-unknown-linux-gnu" {
