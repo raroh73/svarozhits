@@ -21,3 +21,6 @@ target/
 
 # Nix build output
 result*
+
+# Direnv
+.direnv
