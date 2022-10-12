@@ -98,7 +98,7 @@
 
         devShells.default = pkgs.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
-          nativeBuildInputs = with pkgs; [ rustc cargo ];
+          nativeBuildInputs = [ toolchain ];
         };
       }
     );
