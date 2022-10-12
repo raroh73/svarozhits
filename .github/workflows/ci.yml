@@ -18,13 +18,15 @@ jobs:
         with:
           name: svarozhits
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-          extraPullNames: nix-community
+          extraPullNames: nix-community pre-commit-hooks
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Do checks
+        run: nix flake check
       - name: Build images
         run: |
           nix build \

@@ -13,10 +13,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs = {
+        flake-utils.follows = "flake-utils";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
   };
 
-  outputs = { self, fenix, flake-utils, naersk, nixpkgs }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, fenix, flake-utils, naersk, nixpkgs, pre-commit-hooks }:
+    flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
       let
         pkgs = (import nixpkgs) {
           inherit system;
@@ -50,16 +57,23 @@
 
       in
       rec {
-        defaultPackage = packages.x86_64-unknown-linux-gnu;
+        checks = {
+          pre-commit-check = pre-commit-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              cargo-check.enable = true;
+              clippy.enable = true;
+              nixpkgs-fmt.enable = true;
+              rustfmt.enable = true;
+            };
+          };
+        };
+
+        packages.default = packages.x86_64-unknown-linux-gnu;
 
         packages.x86_64-unknown-linux-gnu = naerskBuildPackage "x86_64-unknown-linux-gnu" {
           src = ./.;
           doCheck = true;
-          cargoTestCommands = tests: [
-            ''cargo clippy -- -D warnings''
-            ''cargo fmt --all -- --check''
-            ''cargo test''
-          ];
         };
 
         packages.aarch64-unknown-linux-gnu = naerskBuildPackage "aarch64-unknown-linux-gnu" {
@@ -82,7 +96,8 @@
           };
         };
 
-        devShell = pkgs.mkShell {
+        devShells.default = pkgs.mkShell {
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
           nativeBuildInputs = with pkgs; [ rustc cargo ];
         };
       }

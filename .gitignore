@@ -24,3 +24,6 @@ result*
 
 # Direnv
 .direnv
+
+# Pre-commit hooks
+.pre-commit-config.yaml
