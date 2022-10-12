@@ -1,0 +1,26 @@
+name: Update flake inputs
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+jobs:
+  update-lockfile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v17
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v14
+        with:
+          commit-msg: "chore: update inputs"
+          pr-title: "chore: update inputs"
+          pr-labels: |
+            priority: low
+            scope: dependency
+            scope: flake
+            status: new
+            type: chore
