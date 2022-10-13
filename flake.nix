@@ -85,6 +85,9 @@
           tag = "linux-amd64";
           config = {
             Cmd = [ "${packages.x86_64-unknown-linux-gnu}/bin/svarozhits" ];
+            ExposedPorts = {
+              "3000/tcp" = { };
+            };
           };
         };
 
@@ -93,6 +96,9 @@
           tag = "linux-arm64";
           config = {
             Cmd = [ "${packages.aarch64-unknown-linux-gnu}/bin/svarozhits" ];
+            ExposedPorts = {
+              "3000/tcp" = { };
+            };
           };
         };
 
