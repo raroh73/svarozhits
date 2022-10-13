@@ -1,9 +1,18 @@
 use axum::{routing::get, Router, Server};
 use std::{error::Error, net::SocketAddr};
-use tracing::info;
+use tokio::signal;
+use tracing::{error, info};
 
 async fn root() -> &'static str {
     "Hello, world!"
+}
+
+async fn shutdown_signal() {
+    signal::ctrl_c()
+        .await
+        .expect("Could not register ctrl+c handler!");
+
+    info!("Shutting down!");
 }
 
 #[tokio::main]
@@ -16,7 +25,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     info!("Listening on {}", addr);
 
-    Server::bind(&addr).serve(app.into_make_service()).await?;
+    let server = Server::bind(&addr)
+        .serve(app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal());
+
+    if let Err(err) = server.await {
+        error!("Client error: {}", err)
+    }
 
     Ok(())
 }
