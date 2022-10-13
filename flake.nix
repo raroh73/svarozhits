@@ -80,17 +80,17 @@
           src = ./.;
         };
 
-        packages.docker-image-amd64 = pkgs.dockerTools.buildLayeredImage {
+        packages.docker-image-linux-amd64 = pkgs.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
-          tag = "amd64";
+          tag = "linux-amd64";
           config = {
             Cmd = [ "${packages.x86_64-unknown-linux-gnu}/bin/svarozhits" ];
           };
         };
 
-        packages.docker-image-arm64 = pkgs.pkgsCross.aarch64-multiplatform.dockerTools.buildLayeredImage {
+        packages.docker-image-linux-arm64 = pkgs.pkgsCross.aarch64-multiplatform.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
-          tag = "arm64";
+          tag = "linux-arm64";
           config = {
             Cmd = [ "${packages.aarch64-unknown-linux-gnu}/bin/svarozhits" ];
           };

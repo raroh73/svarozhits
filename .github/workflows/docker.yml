@@ -30,23 +30,23 @@ jobs:
       - name: Build images
         run: |
           nix build \
-            .#docker-image-amd64 \
-            .#docker-image-arm64
+            .#docker-image-linux-amd64 \
+            .#docker-image-linux-arm64
           ls -1 result* | xargs --no-run-if-empty -L 1 docker image load -i
       - name: Rename images
         run: |
-          docker image tag ghcr.io/raroh73/svarozhits:amd64 \
-            ghcr.io/raroh73/svarozhits:latest-amd64
-          docker image tag ghcr.io/raroh73/svarozhits:arm64 \
-            ghcr.io/raroh73/svarozhits:latest-arm64
+          docker image tag ghcr.io/raroh73/svarozhits:linux-amd64 \
+            ghcr.io/raroh73/svarozhits:latest-linux-amd64
+          docker image tag ghcr.io/raroh73/svarozhits:linux-arm64 \
+            ghcr.io/raroh73/svarozhits:latest-linux-arm64
           docker image rm \
-            ghcr.io/raroh73/svarozhits:amd64 \
-            ghcr.io/raroh73/svarozhits:arm64
+            ghcr.io/raroh73/svarozhits:linux-amd64 \
+            ghcr.io/raroh73/svarozhits:linux-arm64
       - name: Push images
         run: docker image push --all-tags ghcr.io/raroh73/svarozhits
       - name: Push manifest
         run: |
           docker manifest create ghcr.io/raroh73/svarozhits:latest \
-            --amend ghcr.io/raroh73/svarozhits:latest-amd64 \
-            --amend ghcr.io/raroh73/svarozhits:latest-arm64
+            --amend ghcr.io/raroh73/svarozhits:latest-linux-amd64 \
+            --amend ghcr.io/raroh73/svarozhits:latest-linux-arm64
           docker manifest push ghcr.io/raroh73/svarozhits:latest
