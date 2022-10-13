@@ -61,8 +61,8 @@
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
-              cargo-check.enable = true;
-              clippy.enable = true;
+              #cargo-check.enable = true;
+              #clippy.enable = true;
               nixpkgs-fmt.enable = true;
               rustfmt.enable = true;
             };
