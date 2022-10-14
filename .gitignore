@@ -27,3 +27,8 @@ result*
 
 # Pre-commit hooks
 .pre-commit-config.yaml
+
+# Local testing
+docker-compose.yml
+start.sh
+stop.sh
