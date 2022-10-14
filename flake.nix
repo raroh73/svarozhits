@@ -66,6 +66,11 @@
           };
         };
 
+        devShells.default = pkgs.mkShell {
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
+          nativeBuildInputs = [ toolchain ];
+        };
+
         packages.default = packages.x86_64-unknown-linux-gnu;
 
         packages.x86_64-unknown-linux-gnu = naerskBuildPackage "x86_64-unknown-linux-gnu" {
@@ -97,11 +102,6 @@
               "3000/tcp" = { };
             };
           };
-        };
-
-        devShells.default = pkgs.mkShell {
-          inherit (self.checks.${system}.pre-commit-check) shellHook;
-          nativeBuildInputs = [ toolchain ];
         };
       }
     );
