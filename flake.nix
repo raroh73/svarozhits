@@ -33,7 +33,6 @@
           combine [
             stable.rustc
             stable.cargo
-            stable.clippy
             stable.rustfmt
             targets.x86_64-unknown-linux-gnu.stable.rust-std
             targets.aarch64-unknown-linux-gnu.stable.rust-std
