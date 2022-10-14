@@ -31,12 +31,12 @@
 
         toolchain = with fenix.packages.${system};
           combine [
-            default.rustc
-            default.cargo
-            default.clippy
-            default.rustfmt
-            targets.x86_64-unknown-linux-gnu.latest.rust-std
-            targets.aarch64-unknown-linux-gnu.latest.rust-std
+            stable.rustc
+            stable.cargo
+            stable.clippy
+            stable.rustfmt
+            targets.x86_64-unknown-linux-gnu.stable.rust-std
+            targets.aarch64-unknown-linux-gnu.stable.rust-std
           ];
 
         naersk' = naersk.lib.${system}.override {
