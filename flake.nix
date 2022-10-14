@@ -53,7 +53,6 @@
         cargoConfig = {
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.pkgsCross.aarch64-multiplatform.stdenv.cc}/bin/aarch64-unknown-linux-gnu-gcc";
         };
-
       in
       rec {
         checks = {
