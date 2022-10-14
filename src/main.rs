@@ -33,7 +33,5 @@ async fn main() -> Result<(), Box<dyn Error>> {
         error!("Client error: {}", err)
     }
 
-    let x = 0;
-
     Ok(())
 }
