@@ -97,7 +97,7 @@
           name = "ghcr.io/raroh73/svarozhits";
           tag = "linux-arm64";
           config = {
-            Entrypoint = [ "${pkgs.tini}/bin/tini" "-v" "--" "${packages.aarch64-unknown-linux-gnu}/bin/svarozhits" ];
+            Entrypoint = [ "${pkgs.pkgsCross.aarch64-multiplatform.tini}/bin/tini" "-v" "--" "${packages.aarch64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
               "3000/tcp" = { };
             };
