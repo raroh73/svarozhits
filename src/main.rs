@@ -32,5 +32,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .with_graceful_shutdown(shutdown_signal())
         .await?;
 
+    info!("shutting down");
+
     Ok(())
 }
