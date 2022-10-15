@@ -1,18 +1,20 @@
 use axum::{routing::get, Router, Server};
 use std::{error::Error, net::SocketAddr};
-use tokio::signal;
-use tracing::{error, info};
+use tokio::signal::unix::{signal, SignalKind};
+use tracing::{info, trace};
 
 async fn root() -> &'static str {
     "Hello, world!"
 }
 
 async fn shutdown_signal() {
-    signal::ctrl_c()
-        .await
-        .expect("Could not register ctrl+c handler!");
+    let mut sigint = signal(SignalKind::interrupt()).expect("could not create SIGINT stream");
+    let mut sigterm = signal(SignalKind::terminate()).expect("could not create SIGTERM stream");
 
-    info!("Shutting down!");
+    tokio::select! {
+        _ = sigint.recv() => trace!("received SIGINT"),
+        _ = sigterm.recv() => trace!("received SIGTERM"),
+    }
 }
 
 #[tokio::main]
