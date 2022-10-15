@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
 
-    info!("Listening on {}", addr);
+    info!("listening on {}", addr);
 
     Server::bind(&addr)
         .serve(app.into_make_service())
