@@ -30,5 +30,5 @@ result*
 
 # Local testing
 docker-compose.yml
-start.sh
-stop.sh
+up.sh
+down.sh
