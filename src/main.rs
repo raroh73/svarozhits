@@ -27,13 +27,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     info!("Listening on {}", addr);
 
-    let server = Server::bind(&addr)
+    Server::bind(&addr)
         .serve(app.into_make_service())
-        .with_graceful_shutdown(shutdown_signal());
-
-    if let Err(err) = server.await {
-        error!("Client error: {}", err)
-    }
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
 
     Ok(())
 }
