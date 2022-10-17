@@ -1,20 +1,32 @@
 use axum::{routing::get, Router, Server};
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
-use tracing::{info, trace};
+use tracing::{debug, info};
 
 async fn root() -> &'static str {
     "Hello, world!"
 }
 
 async fn shutdown_signal() {
-    let mut sigint = signal(SignalKind::interrupt()).expect("could not create SIGINT stream");
-    let mut sigterm = signal(SignalKind::terminate()).expect("could not create SIGTERM stream");
+    let sigint = async {
+        signal(SignalKind::interrupt())
+            .expect("failed to install SIGINT handler")
+            .recv()
+            .await;
+    };
+    let sigterm = async {
+        signal(SignalKind::terminate())
+            .expect("failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
 
     tokio::select! {
-        _ = sigint.recv() => trace!("received SIGINT"),
-        _ = sigterm.recv() => trace!("received SIGTERM"),
+        _ = sigint => debug!("received SIGINT"),
+        _ = sigterm => debug!("received SIGTERM"),
     }
+
+    info!("shutting down");
 }
 
 #[tokio::main]
@@ -31,8 +43,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .serve(app.into_make_service())
         .with_graceful_shutdown(shutdown_signal())
         .await?;
-
-    info!("shutting down");
 
     Ok(())
 }
