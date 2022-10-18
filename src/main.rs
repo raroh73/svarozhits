@@ -8,7 +8,7 @@ use tracing::{debug, info};
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
 
-    let app = Router::new()
+    let router = Router::new()
         .route("/", get(root))
         .layer(TraceLayer::new_for_http());
 
@@ -17,7 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     info!("listening on {}", addr);
 
     Server::bind(&addr)
-        .serve(app.into_make_service())
+        .serve(router.into_make_service())
         .with_graceful_shutdown(shutdown_signal())
         .await?;
 
