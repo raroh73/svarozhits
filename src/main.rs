@@ -1,4 +1,4 @@
-use axum::{routing::get, Router, Server};
+use axum::{response::Html, routing::get, Router, Server};
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower_http::trace::TraceLayer;
@@ -24,8 +24,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn root() -> &'static str {
-    "Hello, world!"
+async fn root() -> Html<&'static str> {
+    Html("<h1>Hello, World!</h1>")
 }
 
 async fn shutdown_signal() {
