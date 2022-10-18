@@ -1,13 +1,16 @@
 use axum::{routing::get, Router, Server};
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
+use tower_http::trace::TraceLayer;
 use tracing::{debug, info};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
 
-    let app = Router::new().route("/", get(root));
+    let app = Router::new()
+        .route("/", get(root))
+        .layer(TraceLayer::new_for_http());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
 
