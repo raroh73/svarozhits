@@ -89,6 +89,7 @@
             ExposedPorts = {
               "3000/tcp" = { };
             };
+            WorkingDir = "/svarozhits";
           };
         };
 
@@ -100,6 +101,7 @@
             ExposedPorts = {
               "3000/tcp" = { };
             };
+            WorkingDir = "/svarozhits";
           };
         };
       }
