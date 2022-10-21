@@ -7,9 +7,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
       - name: Setup Nix
         uses: cachix/install-nix-action@v18
