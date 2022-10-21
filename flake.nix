@@ -59,6 +59,7 @@
           pre-commit-check = pre-commit-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
+              markdownlint.enable = true;
               nixpkgs-fmt.enable = true;
               rustfmt.enable = true;
             };
