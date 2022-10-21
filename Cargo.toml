@@ -8,7 +8,7 @@ repository = "https://github.com/raroh73/svarozhits"
 license = "MIT"
 
 [dependencies]
-axum = "0.5.16"
+axum = "0.5.17"
 tokio = { version = "1.21.2", features = [
     "macros",
     "rt-multi-thread",
