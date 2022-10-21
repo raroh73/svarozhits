@@ -6,6 +6,7 @@ use tower_http::trace::TraceLayer;
 use tracing::{debug, info};
 
 pub mod models;
+pub mod routes;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -16,6 +17,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let router = Router::new()
         .route("/", get(root))
+        .nest("/assets", get(routes::static_handler))
         .layer(Extension(db_pool.clone()))
         .layer(TraceLayer::new_for_http());
 

@@ -1,4 +1,9 @@
+use rust_embed::RustEmbed;
 use serde::Deserialize;
+
+#[derive(RustEmbed)]
+#[folder = "assets"]
+pub struct Assets;
 
 #[derive(Deserialize)]
 pub struct Task {

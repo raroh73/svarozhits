@@ -9,6 +9,8 @@ license = "MIT"
 
 [dependencies]
 axum = "0.5.17"
+mime_guess = "2.0.4"
+rust-embed = "6.4.2"
 serde = { version = "1.0.145", features = ["derive"] }
 sqlx = { version = "0.6.2", features = [
     "offline",
