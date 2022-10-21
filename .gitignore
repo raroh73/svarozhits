@@ -32,3 +32,9 @@ result*
 docker-compose.yml
 up.sh
 down.sh
+
+# Local database
+database.db
+
+# Local environment file
+.env

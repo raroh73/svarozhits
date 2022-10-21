@@ -1,15 +1,22 @@
-use axum::{response::Html, routing::get, Router, Server};
+use axum::{response::Html, routing::get, Extension, Router, Server};
+use sqlx::SqlitePool;
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower_http::trace::TraceLayer;
 use tracing::{debug, info};
 
+pub mod models;
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
 
+    let db_pool = SqlitePool::connect("sqlite://database.db?mode=rwc").await?;
+    sqlx::migrate!("./migrations").run(&db_pool).await?;
+
     let router = Router::new()
         .route("/", get(root))
+        .layer(Extension(db_pool.clone()))
         .layer(TraceLayer::new_for_http());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
@@ -20,6 +27,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .serve(router.into_make_service())
         .with_graceful_shutdown(shutdown_signal())
         .await?;
+
+    db_pool.close().await;
 
     Ok(())
 }

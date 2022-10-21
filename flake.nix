@@ -68,7 +68,7 @@
 
         devShells.default = pkgs.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
-          nativeBuildInputs = [ toolchain ];
+          nativeBuildInputs = [ toolchain ] ++ [ pkgs.sqlx-cli ];
         };
 
         packages.default = packages.x86_64-unknown-linux-gnu;

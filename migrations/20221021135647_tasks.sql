@@ -1,0 +1,5 @@
+CREATE TABLE tasks (
+  task_id INTEGER NOT NULL PRIMARY KEY,
+  task_value TEXT NOT NULL,
+  task_status INTEGER NOT NULL DEFAULT 0
+);
