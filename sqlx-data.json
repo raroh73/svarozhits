@@ -1,3 +1,53 @@
 {
-  "db": "SQLite"
+  "db": "SQLite",
+  "962610002ca8baab7b5d5e3e722dba23d4822aff9c9c3e528985631027b19c55": {
+    "describe": {
+      "columns": [
+        {
+          "name": "task_id",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "task_value",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "task_status",
+          "ordinal": 2,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 0
+      }
+    },
+    "query": "SELECT * FROM tasks"
+  },
+  "9dfcb367cd03b43ab6821c6264b25af1fa22162881394a9a55da73a82ff90d55": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "DELETE FROM tasks WHERE task_id = $1"
+  },
+  "d4aef2f583df23c9dd6853bed66da2ff4321c4b84f8d32b6c4a14e3242f1d095": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "INSERT INTO tasks (task_value) VALUES ($1)"
+  }
 }

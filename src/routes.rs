@@ -1,10 +1,49 @@
+use askama_axum::IntoResponse;
 use axum::{
     body::{boxed, Full},
+    extract::Path,
     http::{header, StatusCode, Uri},
-    response::Response,
+    response::{Redirect, Response},
+    Extension, Form,
 };
+use sqlx::SqlitePool;
 
-use crate::models::Assets;
+use crate::models::{Assets, IndexTemplate, Task};
+
+pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> IndexTemplate {
+    let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks")
+        .fetch_all(&db_pool)
+        .await
+        .unwrap();
+    IndexTemplate { tasks }
+}
+
+pub async fn add_task(
+    Form(task): Form<Task>,
+    Extension(db_pool): Extension<SqlitePool>,
+) -> Redirect {
+    sqlx::query!(
+        "INSERT INTO tasks (task_value) VALUES ($1)",
+        task.task_value
+    )
+    .execute(&db_pool)
+    .await
+    .unwrap();
+
+    Redirect::to("/")
+}
+
+pub async fn delete_task(
+    Path(task_id): Path<i64>,
+    Extension(db_pool): Extension<SqlitePool>,
+) -> impl IntoResponse {
+    sqlx::query!("DELETE FROM tasks WHERE task_id = $1", task_id)
+        .execute(&db_pool)
+        .await
+        .unwrap();
+
+    StatusCode::OK
+}
 
 pub async fn static_handler(uri: Uri) -> Response {
     let path = uri.path().trim_start_matches('/');

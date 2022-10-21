@@ -1,4 +1,7 @@
-use axum::{response::Html, routing::get, Extension, Router, Server};
+use axum::{
+    routing::{delete, get, post},
+    Extension, Router, Server,
+};
 use sqlx::SqlitePool;
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
@@ -16,7 +19,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     sqlx::migrate!("./migrations").run(&db_pool).await?;
 
     let router = Router::new()
-        .route("/", get(root))
+        .route("/", get(routes::show_index))
+        .route("/tasks", post(routes::add_task))
+        .route("/tasks/:task_id", delete(routes::delete_task))
         .nest("/assets", get(routes::static_handler))
         .layer(Extension(db_pool.clone()))
         .layer(TraceLayer::new_for_http());
@@ -33,10 +38,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     db_pool.close().await;
 
     Ok(())
-}
-
-async fn root() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
 }
 
 async fn shutdown_signal() {

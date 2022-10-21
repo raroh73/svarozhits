@@ -1,9 +1,16 @@
+use askama::Template;
 use rust_embed::RustEmbed;
 use serde::Deserialize;
 
 #[derive(RustEmbed)]
 #[folder = "assets"]
 pub struct Assets;
+
+#[derive(Template)]
+#[template(path = "index.html")]
+pub struct IndexTemplate {
+    pub tasks: Vec<Task>,
+}
 
 #[derive(Deserialize)]
 pub struct Task {
