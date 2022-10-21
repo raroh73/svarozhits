@@ -34,6 +34,7 @@
             stable.cargo
             stable.rustc
             stable.rustfmt
+            stable.clippy
             targets.aarch64-unknown-linux-gnu.stable.rust-std
             targets.x86_64-unknown-linux-gnu.stable.rust-std
           ];
