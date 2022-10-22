@@ -18,8 +18,10 @@ jobs:
           toolchain: stable
           components: clippy
           override: true
-      - name: Install required components
-        run: cargo install clippy-sarif sarif-fmt
+      - name: Install required tools
+        uses: taiki-e/install-action@v1
+        with:
+          tool: clippy-sarif sarif-fmt
       - name: Run clippy
         run: |
           cargo clippy --all-features --message-format=json |
