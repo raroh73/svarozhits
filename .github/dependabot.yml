@@ -12,6 +12,16 @@ updates:
       - "scope: dependency"
       - "status: new"
       - "type: chore"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "priority: low"
+      - "scope: dependency"
+      - "scope: docker"
+      - "status: new"
+      - "type: chore"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

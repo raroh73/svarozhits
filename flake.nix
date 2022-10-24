@@ -29,30 +29,11 @@
           inherit system;
         };
 
-        toolchain = with fenix.packages.${system};
-          combine [
-            stable.cargo
-            stable.rustc
-            stable.rustfmt
-            stable.clippy
-            targets.aarch64-unknown-linux-gnu.stable.rust-std
-            targets.x86_64-unknown-linux-gnu.stable.rust-std
-          ];
+        toolchain = fenix.packages.${system}.stable.toolchain;
 
-        naersk' = naersk.lib.${system}.override {
+        naerskBuilder = naersk.lib.${system}.override {
           cargo = toolchain;
           rustc = toolchain;
-        };
-
-        naerskBuildPackage = target: args:
-          naersk'.buildPackage (
-            args
-            // { CARGO_BUILD_TARGET = target; }
-            // cargoConfig
-          );
-
-        cargoConfig = {
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.pkgsCross.aarch64-multiplatform.stdenv.cc}/bin/aarch64-unknown-linux-gnu-gcc";
         };
       in
       rec {
@@ -74,32 +55,17 @@
 
         packages.default = packages.x86_64-unknown-linux-gnu;
 
-        packages.x86_64-unknown-linux-gnu = naerskBuildPackage "x86_64-unknown-linux-gnu" {
+        packages.x86_64-unknown-linux-gnu = naerskBuilder.buildPackage {
           src = ./.;
           doCheck = true;
-        };
-
-        packages.aarch64-unknown-linux-gnu = naerskBuildPackage "aarch64-unknown-linux-gnu" {
-          src = ./.;
+          CARGO_BUILD_TARGET = "x86_64-unknown-linux-gnu";
         };
 
         packages.docker-image-linux-amd64 = pkgs.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
-          tag = "linux-amd64";
+          tag = "latest";
           config = {
-            Entrypoint = [ "${pkgs.tini}/bin/tini" "--" "${packages.x86_64-unknown-linux-gnu}/bin/svarozhits" ];
-            ExposedPorts = {
-              "3000/tcp" = { };
-            };
-            WorkingDir = "/svarozhits";
-          };
-        };
-
-        packages.docker-image-linux-arm64 = pkgs.pkgsCross.aarch64-multiplatform.dockerTools.buildLayeredImage {
-          name = "ghcr.io/raroh73/svarozhits";
-          tag = "linux-arm64";
-          config = {
-            Entrypoint = [ "${pkgs.pkgsCross.aarch64-multiplatform.tini}/bin/tini" "--" "${packages.aarch64-unknown-linux-gnu}/bin/svarozhits" ];
+            Entrypoint = [ "${packages.x86_64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
               "3000/tcp" = { };
             };

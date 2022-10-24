@@ -4,7 +4,93 @@ on:
     branches:
       - main
 jobs:
-  docker:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Run audit
+        uses: actions-rs/audit-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Run check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+  clippy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Add clippy
+        run: rustup component add clippy
+      - name: Run clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
+  fmt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Add rustfmt
+        run: rustup component add rustfmt
+      - name: Run rustfmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+  build:
+    needs: [audit, check, clippy, fmt, test]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -12,42 +98,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup Nix
-        uses: cachix/install-nix-action@v18
-      - name: Setup Cachix
-        uses: cachix/cachix-action@v11
-        with:
-          name: svarozhits
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-          extraPullNames: nix-community, pre-commit-hooks
-      - name: Login to GitHub Container Registry
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GHCR
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Do checks
-        run: nix flake check
-      - name: Build images
-        run: |
-          nix build \
-            .#docker-image-linux-amd64 \
-            .#docker-image-linux-arm64
-          ls -1 result* | xargs --no-run-if-empty -L 1 docker image load -i
-      - name: Rename images
-        run: |
-          docker image tag ghcr.io/raroh73/svarozhits:linux-amd64 \
-            ghcr.io/raroh73/svarozhits:latest-linux-amd64
-          docker image tag ghcr.io/raroh73/svarozhits:linux-arm64 \
-            ghcr.io/raroh73/svarozhits:latest-linux-arm64
-          docker image rm \
-            ghcr.io/raroh73/svarozhits:linux-amd64 \
-            ghcr.io/raroh73/svarozhits:linux-arm64
-      - name: Push images
-        run: docker image push --all-tags ghcr.io/raroh73/svarozhits
-      - name: Push manifest
-        run: |
-          docker manifest create ghcr.io/raroh73/svarozhits:latest \
-            --amend ghcr.io/raroh73/svarozhits:latest-linux-amd64 \
-            --amend ghcr.io/raroh73/svarozhits:latest-linux-arm64
-          docker manifest push ghcr.io/raroh73/svarozhits:latest
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/raroh73/svarozhits:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
