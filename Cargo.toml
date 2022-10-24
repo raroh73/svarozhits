@@ -15,7 +15,7 @@ askama_axum = { version = "0.1.0", git = "https://github.com/djc/askama", rev = 
 axum = "0.5.17"
 mime_guess = "2.0.4"
 rust-embed = "6.4.2"
-serde = { version = "1.0.145", features = ["derive"] }
+serde = { version = "1.0.147", features = ["derive"] }
 sqlx = { version = "0.6.2", features = [
     "offline",
     "runtime-tokio-rustls",
