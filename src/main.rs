@@ -5,7 +5,7 @@ use axum::{
 use sqlx::SqlitePool;
 use std::{error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
-use tower_http::{compression::CompressionLayer, trace::TraceLayer};
+use tower_http::{catch_panic::CatchPanicLayer, compression::CompressionLayer, trace::TraceLayer};
 use tracing::{debug, info};
 
 pub mod models;
@@ -25,6 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .nest("/assets", get(routes::static_handler))
         .layer(Extension(db_pool.clone()))
         .layer(CompressionLayer::new())
+        .layer(CatchPanicLayer::new())
         .layer(TraceLayer::new_for_http());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
