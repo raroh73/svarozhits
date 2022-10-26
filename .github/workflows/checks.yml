@@ -1,0 +1,25 @@
+name: Do checks
+on:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v18
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v11
+        with:
+          name: svarozhits
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - name: Do checks
+        run: nix flake check
