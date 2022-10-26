@@ -12,22 +12,39 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to GHCR
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v18
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v11
+        with:
+          name: svarozhits
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ghcr.io/raroh73/svarozhits:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Build images
+        run: |
+          nix build \
+            .#docker-image-linux-amd64 \
+            .#docker-image-linux-arm64
+          ls -1 result* | xargs --no-run-if-empty -L 1 docker image load -i
+      - name: Rename images
+        run: |
+          docker image tag ghcr.io/raroh73/svarozhits:linux-amd64 \
+            ghcr.io/raroh73/svarozhits:latest-linux-amd64
+          docker image tag ghcr.io/raroh73/svarozhits:linux-arm64 \
+            ghcr.io/raroh73/svarozhits:latest-linux-arm64
+          docker image rm \
+            ghcr.io/raroh73/svarozhits:linux-amd64 \
+            ghcr.io/raroh73/svarozhits:linux-arm64
+      - name: Push images
+        run: docker image push --all-tags ghcr.io/raroh73/svarozhits
+      - name: Push manifest
+        run: |
+          docker manifest create ghcr.io/raroh73/svarozhits:latest \
+            --amend ghcr.io/raroh73/svarozhits:latest-linux-amd64 \
+            --amend ghcr.io/raroh73/svarozhits:latest-linux-arm64
+          docker manifest push ghcr.io/raroh73/svarozhits:latest
