@@ -100,7 +100,7 @@
 
         packages.docker-image-linux-amd64 = pkgs.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
-          tag = "linux-amd64";
+          tag = "amd64";
           config = {
             Entrypoint = [ "${packages.amd64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
@@ -112,7 +112,7 @@
 
         packages.docker-image-linux-arm64 = pkgs.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
-          tag = "linux-arm64";
+          tag = "arm64";
           config = {
             Entrypoint = [ "${packages.arm64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
