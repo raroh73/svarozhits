@@ -25,6 +25,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Do checks
+        run: nix flake check
       - name: Build images
         run: |
           nix build \
