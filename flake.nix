@@ -110,7 +110,7 @@
           };
         };
 
-        packages.docker-image-linux-arm64 = pkgs.dockerTools.buildLayeredImage {
+        packages.docker-image-linux-arm64 = pkgs.pkgsCross.aarch64-multiplatform.dockerTools.buildLayeredImage {
           name = "ghcr.io/raroh73/svarozhits";
           tag = "arm64";
           config = {
