@@ -12,9 +12,9 @@
     <tbody hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
         {% for task in tasks %}
         <tr>
-            <td>{% if task.task_status == 0 %}Not done{% else %}Done{% endif %}</td>
             <td>{{ task.task_value }}</td>
-            <td><button class="btn btn-danger" hx-delete="/tasks/{{ task.task_id }}">Delete </button> </td>
+            <td><button class="btn btn-danger" hx-put="/tasks/{{ task.task_id }}">Done </button><button
+                    class="btn btn-danger" hx-delete="/tasks/{{ task.task_id }}">Delete </button> </td>
         </tr>
         {% endfor %}
     </tbody>

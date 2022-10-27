@@ -11,7 +11,7 @@ use sqlx::SqlitePool;
 use crate::models::{Assets, IndexTemplate, Task};
 
 pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> IndexTemplate {
-    let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks")
+    let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks WHERE task_status = 0")
         .fetch_all(&db_pool)
         .await
         .unwrap();
@@ -31,6 +31,21 @@ pub async fn add_task(
     .unwrap();
 
     Redirect::to("/")
+}
+
+pub async fn mark_task_as_done(
+    Path(task_id): Path<i64>,
+    Extension(db_pool): Extension<SqlitePool>,
+) -> impl IntoResponse {
+    sqlx::query!(
+        "UPDATE tasks SET task_status = 1 WHERE task_id = $1",
+        task_id
+    )
+    .execute(&db_pool)
+    .await
+    .unwrap();
+
+    StatusCode::OK
 }
 
 pub async fn delete_task(
