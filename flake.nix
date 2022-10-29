@@ -106,6 +106,11 @@
             ExposedPorts = {
               "3000/tcp" = { };
             };
+            Labels = {
+              "org.opencontainers.image.description" = "Svarozhits";
+              "org.opencontainers.image.licenses" = "MIT";
+              "org.opencontainers.image.source" = "https://github.com/raroh73/svarozhits";
+            };
             WorkingDir = "/svarozhits";
           };
         };
@@ -117,6 +122,11 @@
             Entrypoint = [ "${packages.arm64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
               "3000/tcp" = { };
+            };
+            Labels = {
+              "org.opencontainers.image.description" = "Svarozhits";
+              "org.opencontainers.image.licenses" = "MIT";
+              "org.opencontainers.image.source" = "https://github.com/raroh73/svarozhits";
             };
             WorkingDir = "/svarozhits";
           };
