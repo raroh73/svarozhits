@@ -3,7 +3,7 @@ use axum::{
     Extension, Router, Server,
 };
 use sqlx::SqlitePool;
-use std::{error::Error, net::SocketAddr};
+use std::{env, error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower_http::{catch_panic::CatchPanicLayer, compression::CompressionLayer, trace::TraceLayer};
 use tracing::{debug, info};
@@ -14,6 +14,8 @@ pub mod routes;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
+
+    let svarozhits_port = env::var("SVAROZHITS_PORT").unwrap_or(3000.to_string());
 
     let db_pool = SqlitePool::connect("sqlite://database.db?mode=rwc").await?;
     sqlx::migrate!("./migrations").run(&db_pool).await?;
@@ -29,7 +31,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .layer(CatchPanicLayer::new())
         .layer(TraceLayer::new_for_http());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], svarozhits_port.parse::<u16>()?));
 
     info!("listening on {}", addr);
 
