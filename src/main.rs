@@ -15,7 +15,7 @@ pub mod routes;
 async fn main() -> Result<(), Box<dyn Error>> {
     tracing_subscriber::fmt::init();
 
-    let svarozhits_port = env::var("SVAROZHITS_PORT").unwrap_or(3000.to_string());
+    let svarozhits_port = env::var("SVAROZHITS_PORT").unwrap_or_else(|_| 3000.to_string());
 
     let db_pool = SqlitePool::connect("sqlite://database.db?mode=rwc").await?;
     sqlx::migrate!("./migrations").run(&db_pool).await?;
