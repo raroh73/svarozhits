@@ -25,9 +25,6 @@ result*
 # Direnv
 .direnv
 
-# Pre-commit hooks
-.pre-commit-config.yaml
-
 # Local testing
 docker-compose.yml
 up.sh
