@@ -38,3 +38,6 @@ database.db
 
 # Local environment file
 .env
+
+# Minified templates
+/templates/*.html
