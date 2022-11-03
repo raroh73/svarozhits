@@ -30,4 +30,7 @@ FROM --platform=$TARGETPLATFORM debian:11.5-slim AS runtime
 WORKDIR /svarozhits
 COPY --from=builder /tmp/svarozhits /usr/local/bin/
 EXPOSE 8008
+LABEL "org.opencontainers.image.description" = "Svarozhits"
+LABEL "org.opencontainers.image.licenses" = "MIT"
+LABEL "org.opencontainers.image.source" = "https://github.com/raroh73/svarozhits"
 ENTRYPOINT ["/usr/local/bin/svarozhits"]
