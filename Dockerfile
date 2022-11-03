@@ -29,5 +29,5 @@ RUN touch src/main.rs \
 FROM --platform=$TARGETPLATFORM debian:11.5-slim AS runtime
 WORKDIR /svarozhits
 COPY --from=builder /tmp/svarozhits /usr/local/bin/
-EXPOSE 3000
+EXPOSE 8008
 ENTRYPOINT ["/usr/local/bin/svarozhits"]

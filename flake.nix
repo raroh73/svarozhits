@@ -104,7 +104,7 @@
           config = {
             Entrypoint = [ "${packages.amd64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
-              "3000/tcp" = { };
+              "8008/tcp" = { };
             };
             Labels = {
               "org.opencontainers.image.description" = "Svarozhits";
@@ -121,7 +121,7 @@
           config = {
             Entrypoint = [ "${packages.arm64-unknown-linux-gnu}/bin/svarozhits" ];
             ExposedPorts = {
-              "3000/tcp" = { };
+              "8008/tcp" = { };
             };
             Labels = {
               "org.opencontainers.image.description" = "Svarozhits";
