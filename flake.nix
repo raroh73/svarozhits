@@ -74,7 +74,7 @@
       rec {
         checks = {
           audit = checksCraneLib.cargoAudit {
-            inherit src advisory-db;
+            inherit advisory-db src;
           };
           clippy = checksCraneLib.cargoClippy {
             inherit cargoArtifacts src;
