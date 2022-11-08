@@ -2,16 +2,15 @@ use minify_html::{minify, Cfg};
 use std::{error::Error, fs};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let cfg = Cfg::new();
-
-    fs::write(
-        "templates/base.html",
-        minify(&fs::read("templates/src/base.html")?, &cfg),
-    )?;
-    fs::write(
-        "templates/index.html",
-        minify(&fs::read("templates/src/index.html")?, &cfg),
-    )?;
+    let minify_cfg = Cfg::new();
+    let templates = fs::read_dir("templates/src")?;
+    for template in templates {
+        let template = template?;
+        fs::write(
+            format!("templates/{}", template.file_name().to_string_lossy()),
+            minify(&fs::read(template.path().as_path())?, &minify_cfg),
+        )?;
+    }
 
     println!("cargo:rerun-if-changed=templates/src");
 
