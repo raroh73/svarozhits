@@ -1,5 +1,5 @@
 use minify_html::{minify, Cfg};
-use std::{error::Error, fs};
+use std::{error::Error, fs, process::Command};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let minify_cfg = Cfg::new();
@@ -11,6 +11,16 @@ fn main() -> Result<(), Box<dyn Error>> {
             minify(&fs::read(template.path().as_path())?, &minify_cfg),
         )?;
     }
+
+    Command::new("tailwindcss")
+        .args(&[
+            "-i",
+            "styles.css",
+            "-o",
+            "assets/styles.min.css",
+            "--minify",
+        ])
+        .status()?;
 
     println!("cargo:rerun-if-changed=templates/src");
 

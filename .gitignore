@@ -38,3 +38,6 @@ database.db
 
 # Minified templates
 /templates/*.html
+
+# Generated CSS
+/assets/styles.min.css

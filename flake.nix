@@ -37,6 +37,12 @@
           targets = [ "aarch64-unknown-linux-gnu" "x86_64-unknown-linux-gnu" ];
         };
 
+        tailwindCss = pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+          plugins = [
+            pkgs.nodePackages."@tailwindcss/forms"
+          ];
+        });
+
         src = ./.;
 
         checksCraneLib = crane.lib.${system}.overrideToolchain toolchain;
@@ -58,6 +64,7 @@
         amd64Build =
           { stdenv }: amd64CraneLib.buildPackage {
             inherit src;
+            nativeBuildInputs = [ tailwindCss ];
             doCheck = false;
             CARGO_BUILD_TARGET = "x86_64-unknown-linux-gnu";
           };
@@ -65,6 +72,7 @@
         arm64Build =
           { stdenv }: arm64CraneLib.buildPackage {
             inherit src;
+            nativeBuildInputs = [ tailwindCss ];
             doCheck = false;
             CARGO_BUILD_TARGET = "aarch64-unknown-linux-gnu";
             CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER = "${pkgs.pkgsCross.aarch64-multiplatform.stdenv.cc}/bin/aarch64-unknown-linux-gnu-gcc";
@@ -89,7 +97,7 @@
         };
 
         devShells.default = pkgs.mkShell {
-          nativeBuildInputs = [ toolchain ] ++ [ pkgs.sqlx-cli ];
+          nativeBuildInputs = [ toolchain tailwindCss ] ++ [ pkgs.sqlx-cli ];
         };
 
         packages.default = packages.amd64-unknown-linux-gnu;

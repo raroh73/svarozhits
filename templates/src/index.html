@@ -2,16 +2,22 @@
 {% block title %}Index{% endblock %}
 {% block main %}
 {% for task in tasks %}
-<article hx-confirm="Are you sure?" hx-target="this" hx-swap="outerHTML swap:1s">
-    <p>{{ task.task_value }}</p>
-    <p>
-        <a href="#" role="button" hx-put="/tasks/{{ task.task_id }}">DONE</a>
-        <a href="#" role="button" hx-delete="/tasks/{{ task.task_id }}">DELETE</a>
-    </p>
-</article>
+<div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
+    <p class="break-all dark:text-sky-400 m-1 text-2xl">{{ task.task_value }}</p>
+    <button type="button" hx-put="/tasks/{{ task.task_id }}" hx-confirm="Mark as done?" hx-target="closest div"
+        hx-swap="outerHTML swap:1s"
+        class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DONE</button>
+    <button type="button" hx-delete="/tasks/{{ task.task_id }}" hx-confirm="Delete?" hx-target="closest div"
+        hx-swap="outerHTML swap:1s"
+        class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DELETE</button>
+</div>
 {% endfor %}
-<form action="/tasks" method="post">
-    <input type="text" id="task_value" name="task_value">
-    <input type="submit" value="ADD">
-</form>
+<div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
+    <form action="/tasks" method="post">
+        <input type="text" name="task_value" required
+            class="dark:bg-gray-700 m-1 px-4 py-2 rounded-lg text-2xl text-center w-full">
+        <button type="submit"
+            class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">ADD</button>
+    </form>
+</div>
 {% endblock %}
