@@ -86,6 +86,7 @@
           };
           clippy = checksCraneLib.cargoClippy {
             inherit cargoArtifacts src;
+            nativeBuildInputs = [ tailwindCss ];
             cargoClippyExtraArgs = "--all-targets -- --deny warnings";
           };
           fmt = checksCraneLib.cargoFmt {
@@ -93,6 +94,7 @@
           };
           test = checksCraneLib.cargoTest {
             inherit cargoArtifacts src;
+            nativeBuildInputs = [ tailwindCss ];
           };
         };
 
