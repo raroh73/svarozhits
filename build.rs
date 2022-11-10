@@ -13,7 +13,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     Command::new("tailwindcss")
-        .args(&[
+        .args([
             "-i",
             "styles.css",
             "-o",
