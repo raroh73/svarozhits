@@ -13,6 +13,7 @@ askama = { version = "0.11.0", git = "https://github.com/djc/askama", rev = "c44
 ] }
 askama_axum = { version = "0.1.0", git = "https://github.com/djc/askama", rev = "c441459" }
 axum = "0.5.17"
+hex = "0.4.3"
 mime_guess = "2.0.4"
 rust-embed = "6.4.2"
 serde = { version = "1.0.147", features = ["derive"] }

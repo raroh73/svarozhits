@@ -1,8 +1,8 @@
 use askama_axum::IntoResponse;
 use axum::{
-    body::{boxed, Full},
+    body::{boxed, Empty, Full},
     extract::Path,
-    http::{header, StatusCode, Uri},
+    http::{header, HeaderMap, StatusCode, Uri},
     response::{Redirect, Response},
     Extension, Form,
 };
@@ -60,16 +60,30 @@ pub async fn delete_task(
     StatusCode::OK
 }
 
-pub async fn static_handler(uri: Uri) -> Response {
+pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
     let path = uri.path().trim_start_matches('/');
 
     match Assets::get(path) {
         Some(content) => {
+            let hash = hex::encode(content.metadata.sha256_hash());
+
+            if headers
+                .get(header::IF_NONE_MATCH)
+                .map(|etag| etag.to_str().unwrap_or("000000").eq(&hash))
+                .unwrap_or(false)
+            {
+                return Response::builder()
+                    .status(StatusCode::NOT_MODIFIED)
+                    .body(boxed(Empty::new()))
+                    .unwrap();
+            }
+
             let body = boxed(Full::from(content.data));
             let mime = mime_guess::from_path(path).first_or_octet_stream();
 
             Response::builder()
                 .header(header::CONTENT_TYPE, mime.as_ref())
+                .header(header::ETAG, hash)
                 .body(body)
                 .unwrap()
         }
