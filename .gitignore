@@ -32,6 +32,8 @@ down.sh
 
 # Local database
 database.db
+database.db-shm
+database.db-wal
 
 # Local environment file
 .env
