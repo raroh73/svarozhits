@@ -3,7 +3,7 @@ use axum::{
     body::{boxed, Empty, Full},
     extract::Path,
     http::{header, HeaderMap, StatusCode, Uri},
-    response::{Redirect, Response},
+    response::Response,
     Extension, Form,
 };
 use sqlx::SqlitePool;
@@ -21,7 +21,7 @@ pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> IndexTempl
 pub async fn add_task(
     Form(task): Form<Task>,
     Extension(db_pool): Extension<SqlitePool>,
-) -> Redirect {
+) -> Response {
     sqlx::query!(
         "INSERT INTO tasks (task_value) VALUES ($1)",
         task.task_value
@@ -30,7 +30,11 @@ pub async fn add_task(
     .await
     .unwrap();
 
-    Redirect::to("/")
+    Response::builder()
+        .status(StatusCode::SEE_OTHER)
+        .header(header::LOCATION, "/")
+        .body(boxed(Empty::new()))
+        .unwrap()
 }
 
 pub async fn mark_task_as_done(
