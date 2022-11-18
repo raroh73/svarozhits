@@ -58,13 +58,16 @@ pub async fn mark_task_as_done(
 pub async fn delete_task(
     Path(task_id): Path<i64>,
     Extension(db_pool): Extension<SqlitePool>,
-) -> impl IntoResponse {
+) -> Response {
     sqlx::query!("DELETE FROM tasks WHERE task_id = $1", task_id)
         .execute(&db_pool)
         .await
         .unwrap();
 
-    StatusCode::OK
+    Response::builder()
+        .status(StatusCode::OK)
+        .body(boxed(Empty::new()))
+        .unwrap()
 }
 
 pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
