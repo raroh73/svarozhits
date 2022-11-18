@@ -40,7 +40,7 @@ pub async fn add_task(
 pub async fn mark_task_as_done(
     Path(task_id): Path<i64>,
     Extension(db_pool): Extension<SqlitePool>,
-) -> impl IntoResponse {
+) -> Response {
     sqlx::query!(
         "UPDATE tasks SET task_status = 1 WHERE task_id = $1",
         task_id
@@ -49,7 +49,10 @@ pub async fn mark_task_as_done(
     .await
     .unwrap();
 
-    StatusCode::OK
+    Response::builder()
+        .status(StatusCode::OK)
+        .body(boxed(Empty::new()))
+        .unwrap()
 }
 
 pub async fn delete_task(
