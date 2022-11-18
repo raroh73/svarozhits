@@ -1,4 +1,3 @@
-use askama_axum::IntoResponse;
 use axum::{
     body::{boxed, Empty, Full},
     extract::Path,
