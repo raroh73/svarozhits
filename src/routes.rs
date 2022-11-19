@@ -1,3 +1,4 @@
+use askama::Template;
 use axum::{
     body::{boxed, Empty, Full},
     extract::Path,
@@ -107,7 +108,7 @@ pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
 
 pub async fn not_found() -> Response {
     Response::builder()
-            .status(StatusCode::NOT_FOUND)
+        .status(StatusCode::NOT_FOUND)
         .header(header::CONTENT_TYPE, "text/html")
         .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
         .unwrap()
