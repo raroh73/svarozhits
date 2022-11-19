@@ -12,6 +12,10 @@ pub struct IndexTemplate {
     pub tasks: Vec<Task>,
 }
 
+#[derive(Template)]
+#[template(path = "not_found.html")]
+pub struct NotFoundTemplate {}
+
 #[derive(Deserialize)]
 pub struct Task {
     #[serde(default)]

@@ -7,7 +7,7 @@ use axum::{
 };
 use sqlx::SqlitePool;
 
-use crate::models::{Assets, IndexTemplate, Task};
+use crate::models::{Assets, IndexTemplate, NotFoundTemplate, Task};
 
 pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
     let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks WHERE task_status = 0")
@@ -101,9 +101,14 @@ pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
                 .body(body)
                 .unwrap()
         }
-        None => Response::builder()
-            .status(StatusCode::NOT_FOUND)
-            .body(boxed(Full::from("404")))
-            .unwrap(),
+        None => not_found().await,
     }
+}
+
+pub async fn not_found() -> Response {
+    Response::builder()
+            .status(StatusCode::NOT_FOUND)
+        .header(header::CONTENT_TYPE, "text/html")
+        .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
+        .unwrap()
 }

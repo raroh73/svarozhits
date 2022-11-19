@@ -1,4 +1,5 @@
 use axum::{
+    handler::Handler,
     routing::{delete, get, post, put},
     Extension, Router, Server,
 };
@@ -26,6 +27,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/tasks/:task_id", put(routes::mark_task_as_done))
         .route("/tasks/:task_id", delete(routes::delete_task))
         .nest("/assets", get(routes::static_handler))
+        .fallback(routes::not_found.into_service())
         .layer(Extension(db_pool.clone()))
         .layer(CompressionLayer::new())
         .layer(CatchPanicLayer::new())
