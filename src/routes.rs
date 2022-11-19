@@ -9,12 +9,17 @@ use sqlx::SqlitePool;
 
 use crate::models::{Assets, IndexTemplate, Task};
 
-pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> IndexTemplate {
+pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
     let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks WHERE task_status = 0")
         .fetch_all(&db_pool)
         .await
         .unwrap();
-    IndexTemplate { tasks }
+
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "text/html")
+        .body(boxed(Full::from(IndexTemplate { tasks }.render().unwrap())))
+        .unwrap()
 }
 
 pub async fn add_task(
