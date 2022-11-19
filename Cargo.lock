@@ -1314,6 +1314,7 @@ dependencies = [
  "askama",
  "axum",
  "hex",
+ "mime",
  "mime_guess",
  "minify-html",
  "rust-embed",

@@ -18,7 +18,7 @@ pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
 
     Response::builder()
         .status(StatusCode::OK)
-        .header(header::CONTENT_TYPE, "text/html")
+        .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
         .body(boxed(Full::from(IndexTemplate { tasks }.render().unwrap())))
         .unwrap()
 }
@@ -109,7 +109,7 @@ pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
 pub async fn not_found() -> Response {
     Response::builder()
         .status(StatusCode::NOT_FOUND)
-        .header(header::CONTENT_TYPE, "text/html")
+        .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
         .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
         .unwrap()
 }
