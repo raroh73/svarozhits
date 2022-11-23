@@ -11,7 +11,7 @@
 </div>
 {% for task in tasks %}
 <div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
-    <p class="break-all dark:text-sky-400 m-1 text-2xl">{{ task.task_value }}</p>
+    <p class="break-words dark:text-sky-400 m-1 text-2xl">{{ task.task_value }}</p>
     <button type="button" hx-patch="/tasks/{{ task.task_id }}" hx-confirm="Mark as done?" hx-target="closest div"
         hx-swap="outerHTML swap:1s"
         class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DONE</button>
