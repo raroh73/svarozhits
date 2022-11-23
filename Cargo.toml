@@ -13,7 +13,7 @@ axum = "0.5.17"
 hex = "0.4.3"
 mime = "0.3.16"
 mime_guess = "2.0.4"
-rust-embed = "6.4.2"
+rust-embed = "6.5.0"
 serde = { version = "1.0.147", features = ["derive"] }
 sqlx = { version = "0.6.2", features = [
     "offline",
