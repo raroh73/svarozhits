@@ -1,6 +1,6 @@
 use axum::{
     handler::Handler,
-    routing::{delete, get, post, put},
+    routing::{delete, get, patch, post},
     Extension, Router, Server,
 };
 use sqlx::SqlitePool;
@@ -24,7 +24,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let router = Router::new()
         .route("/", get(routes::show_index))
         .route("/tasks", post(routes::add_task))
-        .route("/tasks/:task_id", put(routes::mark_task_as_done))
+        .route("/tasks/:task_id", patch(routes::mark_task_as_done))
         .route("/tasks/:task_id", delete(routes::delete_task))
         .nest("/assets", get(routes::static_handler))
         .fallback(routes::not_found.into_service())
