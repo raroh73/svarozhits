@@ -36,8 +36,8 @@ pub async fn add_task(
     .unwrap();
 
     Response::builder()
-        .status(StatusCode::SEE_OTHER)
-        .header(header::LOCATION, "/")
+        .status(StatusCode::OK)
+        .header("hx-refresh", "true")
         .body(boxed(Empty::new()))
         .unwrap()
 }
