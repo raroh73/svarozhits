@@ -2,7 +2,7 @@
 {% block title %}Index{% endblock %}
 {% block main %}
 <div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
-    <form hx-post="/tasks">
+    <form hx-post="/tasks" autocomplete="off">
         <input type="text" name="task_value" placeholder="task" required
             class="dark:bg-gray-700 m-1 px-4 py-2 rounded-lg text-2xl text-center w-full">
         <button type="submit"
