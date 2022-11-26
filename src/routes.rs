@@ -75,7 +75,7 @@ pub async fn delete_task(
         .unwrap()
 }
 
-pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
+pub async fn fallback(uri: Uri, headers: HeaderMap) -> Response {
     let path = uri.path().trim_start_matches('/');
 
     match Assets::get(path) {
@@ -102,14 +102,10 @@ pub async fn static_handler(uri: Uri, headers: HeaderMap) -> Response {
                 .body(body)
                 .unwrap()
         }
-        None => not_found().await,
+        None => Response::builder()
+            .status(StatusCode::NOT_FOUND)
+            .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
+            .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
+            .unwrap(),
     }
-}
-
-pub async fn not_found() -> Response {
-    Response::builder()
-        .status(StatusCode::NOT_FOUND)
-        .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
-        .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
-        .unwrap()
 }

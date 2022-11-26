@@ -17,7 +17,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "-i",
             "styles.css",
             "-o",
-            "assets/styles.min.css",
+            "assets/css/styles.min.css",
             "--minify",
         ])
         .status()?;
