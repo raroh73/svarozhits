@@ -11,10 +11,13 @@ use sqlx::SqlitePool;
 use crate::models::{Assets, IndexTemplate, NotFoundTemplate, Task};
 
 pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
-    let tasks = sqlx::query_as!(Task, "SELECT * FROM tasks WHERE task_status = 0")
-        .fetch_all(&db_pool)
-        .await
-        .unwrap();
+    let tasks = sqlx::query_as!(
+        Task,
+        "SELECT * FROM tasks WHERE task_status = 0 ORDER BY task_id DESC"
+    )
+    .fetch_all(&db_pool)
+    .await
+    .unwrap();
 
     Response::builder()
         .status(StatusCode::OK)
