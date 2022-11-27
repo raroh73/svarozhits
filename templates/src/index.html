@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Index{% endblock %}
 {% block main %}
-<div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
+<div class="bg-slate-200 dark:bg-slate-800 m-2 p-4 rounded-lg">
     <form hx-post="/tasks" autocomplete="off">
         <input type="text" name="task_value" placeholder="task" required
-            class="dark:bg-gray-700 m-1 px-4 py-2 rounded-lg text-2xl text-center w-full">
+            class="bg-gray-100 dark:bg-gray-700 m-1 px-4 py-2 rounded-lg text-2xl text-center w-full">
         <button type="submit"
-            class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">ADD</button>
+            class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">ADD</button>
     </form>
 </div>
 {% for task in tasks %}
-<div class="dark:bg-slate-800 m-2 p-4 rounded-lg">
-    <p class="break-words dark:text-sky-400 m-1 text-2xl">{{ task.task_value }}</p>
+<div class="bg-slate-200 dark:bg-slate-800 m-2 p-4 rounded-lg">
+    <p class="break-words text-sky-500 dark:text-sky-400 m-1 text-2xl">{{ task.task_value }}</p>
     <button type="button" hx-patch="/tasks/{{ task.task_id }}" hx-confirm="Mark as done?" hx-target="closest div"
         hx-swap="outerHTML swap:1s"
-        class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DONE</button>
+        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DONE</button>
     <button type="button" hx-delete="/tasks/{{ task.task_id }}" hx-confirm="Delete?" hx-target="closest div"
         hx-swap="outerHTML swap:1s"
-        class="dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DELETE</button>
+        class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 m-1 px-4 py-2 rounded-lg text-center text-white">DELETE</button>
 </div>
 {% endfor %}
 {% endblock %}
