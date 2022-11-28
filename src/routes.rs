@@ -1,16 +1,16 @@
 use askama::Template;
 use axum::{
     body::{boxed, Empty, Full},
-    extract::Path,
+    extract::{Path, State},
     http::{header, HeaderMap, StatusCode, Uri},
     response::Response,
-    Extension, Form,
+    Form,
 };
 use sqlx::SqlitePool;
 
 use crate::models::{Assets, IndexTemplate, NotFoundTemplate, Task};
 
-pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
+pub async fn show_index(State(db_pool): State<SqlitePool>) -> Response {
     let tasks = sqlx::query_as!(
         Task,
         "SELECT * FROM tasks WHERE task_status = 0 ORDER BY task_id DESC"
@@ -26,10 +26,7 @@ pub async fn show_index(Extension(db_pool): Extension<SqlitePool>) -> Response {
         .unwrap()
 }
 
-pub async fn add_task(
-    Form(task): Form<Task>,
-    Extension(db_pool): Extension<SqlitePool>,
-) -> Response {
+pub async fn add_task(State(db_pool): State<SqlitePool>, Form(task): Form<Task>) -> Response {
     sqlx::query!(
         "INSERT INTO tasks (task_value) VALUES ($1)",
         task.task_value
@@ -46,8 +43,8 @@ pub async fn add_task(
 }
 
 pub async fn mark_task_as_done(
+    State(db_pool): State<SqlitePool>,
     Path(task_id): Path<i64>,
-    Extension(db_pool): Extension<SqlitePool>,
 ) -> Response {
     sqlx::query!(
         "UPDATE tasks SET task_status = 1 WHERE task_id = $1",
@@ -63,10 +60,7 @@ pub async fn mark_task_as_done(
         .unwrap()
 }
 
-pub async fn delete_task(
-    Path(task_id): Path<i64>,
-    Extension(db_pool): Extension<SqlitePool>,
-) -> Response {
+pub async fn delete_task(State(db_pool): State<SqlitePool>, Path(task_id): Path<i64>) -> Response {
     sqlx::query!("DELETE FROM tasks WHERE task_id = $1", task_id)
         .execute(&db_pool)
         .await
