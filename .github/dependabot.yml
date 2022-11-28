@@ -12,6 +12,7 @@ updates:
       - "scope: dependency"
       - "status: new"
       - "type: chore"
+    target-branch: "deps"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -24,3 +25,4 @@ updates:
       - "scope: github-action"
       - "status: new"
       - "type: chore"
+    target-branch: "deps"
