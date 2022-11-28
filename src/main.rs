@@ -1,6 +1,6 @@
 use axum::{
     routing::{delete, get, patch, post},
-    Extension, Router, Server,
+    Router, Server,
 };
 use sqlx::SqlitePool;
 use std::{env, error::Error, net::SocketAddr};
@@ -26,7 +26,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/tasks/:task_id", patch(routes::mark_task_as_done))
         .route("/tasks/:task_id", delete(routes::delete_task))
         .fallback(routes::fallback)
-        .layer(Extension(db_pool.clone()))
         .layer(CompressionLayer::new())
         .layer(CatchPanicLayer::new())
         .layer(TraceLayer::new_for_http())
