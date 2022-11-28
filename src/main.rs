@@ -1,5 +1,4 @@
 use axum::{
-    handler::Handler,
     routing::{delete, get, patch, post},
     Extension, Router, Server,
 };
@@ -26,11 +25,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/tasks", post(routes::add_task))
         .route("/tasks/:task_id", patch(routes::mark_task_as_done))
         .route("/tasks/:task_id", delete(routes::delete_task))
-        .fallback(routes::fallback.into_service())
+        .fallback(routes::fallback)
         .layer(Extension(db_pool.clone()))
         .layer(CompressionLayer::new())
         .layer(CatchPanicLayer::new())
-        .layer(TraceLayer::new_for_http());
+        .layer(TraceLayer::new_for_http())
+        .with_state(db_pool.clone());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], svarozhits_port.parse::<u16>()?));
 
