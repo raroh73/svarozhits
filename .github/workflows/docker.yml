@@ -26,10 +26,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Do checks
-        run: nix flake check
+        run: nix flake check -L
       - name: Build images
         run: |
-          nix build \
+          nix build -L \
             .#docker-image-linux-amd64 \
             .#docker-image-linux-arm64
           ls -1 result* | xargs --no-run-if-empty -L 1 docker image load -i

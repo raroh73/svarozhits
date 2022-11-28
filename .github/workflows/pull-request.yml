@@ -15,4 +15,4 @@ jobs:
       - name: Setup Nix
         uses: cachix/install-nix-action@v18
       - name: Do checks
-        run: nix flake check
+        run: nix flake check -L
