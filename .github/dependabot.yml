@@ -1,32 +1,32 @@
-version: 2
-updates:
-  - package-ecosystem: "cargo"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "chore"
-    labels:
-      - "priority: low"
-      - "scope: cargo"
-      - "scope: dependency"
-      - "status: new"
-      - "type: chore"
-    target-branch: "deps"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: "chore"
-    labels:
-      - "priority: low"
-      - "scope: dependency"
-      - "scope: github-action"
-      - "status: new"
-      - "type: chore"
-    target-branch: "deps"
+#version: 2
+#updates:
+#  - package-ecosystem: "cargo"
+#    directory: "/"
+#    schedule:
+#      interval: "daily"
+#    allow:
+#      - dependency-type: "all"
+#    commit-message:
+#      prefix: "chore"
+#    labels:
+#      - "priority: low"
+#      - "scope: cargo"
+#      - "scope: dependency"
+#      - "status: new"
+#      - "type: chore"
+#    target-branch: "deps"
+#  - package-ecosystem: "github-actions"
+#    directory: "/"
+#    schedule:
+#      interval: "daily"
+#    allow:
+#      - dependency-type: "all"
+#    commit-message:
+#      prefix: "chore"
+#    labels:
+#      - "priority: low"
+#      - "scope: dependency"
+#      - "scope: github-action"
+#      - "status: new"
+#      - "type: chore"
+#    target-branch: "deps"
