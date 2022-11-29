@@ -3,7 +3,9 @@ updates:
   - package-ecosystem: "cargo"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
     allow:
       - dependency-type: "all"
     commit-message:
@@ -18,7 +20,9 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
     allow:
       - dependency-type: "all"
     commit-message:
