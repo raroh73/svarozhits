@@ -16,6 +16,7 @@ updates:
       - "scope: dependency"
       - "status: new"
       - "type: chore"
+    open-pull-requests-limit: 25
     target-branch: "deps"
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -33,4 +34,5 @@ updates:
       - "scope: github-action"
       - "status: new"
       - "type: chore"
+    open-pull-requests-limit: 10
     target-branch: "deps"
