@@ -9,7 +9,7 @@ license = "MIT"
 
 [dependencies]
 askama = "0.11.1"
-axum = "0.6.0"
+axum = "0.6.1"
 hex = "0.4.3"
 mime = "0.3.16"
 mime_guess = "2.0.4"
@@ -25,7 +25,7 @@ tokio = { version = "1.22.0", features = [
     "rt-multi-thread",
     "signal",
 ] }
-tower-http = { version = "0.3.0", features = [
+tower-http = { version = "0.3.5", features = [
     "catch-panic",
     "compression-gzip",
     "trace",
