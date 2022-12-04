@@ -747,9 +747,9 @@ dependencies = [
 
 [[package]]
 name = "minify-js"
-version = "0.2.10"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b825a24496146b058d0b0ee1c1b8ba08609b464d0f4b938024336a8d30bab81"
+checksum = "7fe033709f5a1159736cf7e22748518ffb75af26f3a6264d52ecc8bb38c68c36"
 dependencies = [
  "lazy_static",
  "parse-js",
@@ -873,9 +873,9 @@ dependencies = [
 
 [[package]]
 name = "parse-js"
-version = "0.3.2"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b494997e8fc02c4da5bd975d45cfede3b972b19d19f90dfa9948c354b2bf8209"
+checksum = "66bb85ec60d22b9e6d4adac1e3dbdaf3903a4485f476c5f4dd7ed1285cbf4dad"
 dependencies = [
  "aho-corasick",
  "lazy_static",
