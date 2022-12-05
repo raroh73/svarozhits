@@ -8,6 +8,7 @@ use tokio::signal::unix::{signal, SignalKind};
 use tower_http::{catch_panic::CatchPanicLayer, compression::CompressionLayer, trace::TraceLayer};
 use tracing::{debug, info};
 
+pub mod errors;
 pub mod models;
 pub mod routes;
 
