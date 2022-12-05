@@ -6,7 +6,9 @@ use axum::{
 };
 use tracing::error;
 
-use crate::models::NotFoundTemplate;
+#[derive(Template)]
+#[template(path = "not_found.html")]
+struct NotFoundTemplate {}
 
 #[derive(Template)]
 #[template(path = "internal_server_error.html")]
