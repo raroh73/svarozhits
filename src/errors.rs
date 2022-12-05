@@ -11,6 +11,15 @@ pub enum AppError {
     InternalServerError(anyhow::Error),
 }
 
+impl<E> From<E> for AppError
+where
+    E: Into<anyhow::Error>,
+{
+    fn from(err: E) -> Self {
+        AppError::InternalServerError(err.into())
+    }
+}
+
 #[derive(Template)]
 #[template(path = "not_found.html")]
 struct NotFoundTemplate {}
@@ -39,14 +48,5 @@ impl IntoResponse for AppError {
                     .unwrap()
             }
         }
-    }
-}
-
-impl<E> From<E> for AppError
-where
-    E: Into<anyhow::Error>,
-{
-    fn from(err: E) -> Self {
-        AppError::InternalServerError(err.into())
     }
 }
