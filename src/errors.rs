@@ -6,6 +6,11 @@ use axum::{
 };
 use tracing::error;
 
+pub enum AppError {
+    NotFound,
+    InternalServerError(anyhow::Error),
+}
+
 #[derive(Template)]
 #[template(path = "not_found.html")]
 struct NotFoundTemplate {}
@@ -13,11 +18,6 @@ struct NotFoundTemplate {}
 #[derive(Template)]
 #[template(path = "internal_server_error.html")]
 struct InternalServerErrorTemplate {}
-
-pub enum AppError {
-    NotFound,
-    InternalServerError(anyhow::Error),
-}
 
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
