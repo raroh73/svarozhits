@@ -59,6 +59,7 @@
 
         cargoArtifacts = checksCraneLib.buildDepsOnly {
           inherit src;
+          doCheck = false;
         };
 
         amd64Build =
