@@ -15,13 +15,18 @@ struct NotFoundTemplate {}
 struct InternalServerErrorTemplate {}
 
 pub enum AppError {
-    InternalServerError(anyhow::Error),
     NotFound,
+    InternalServerError(anyhow::Error),
 }
 
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         match self {
+            AppError::NotFound => Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
+                .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
+                .unwrap(),
             AppError::InternalServerError(err) => {
                 error!("{:#}", err);
 
@@ -33,11 +38,6 @@ impl IntoResponse for AppError {
                     )))
                     .unwrap()
             }
-            AppError::NotFound => Response::builder()
-                .status(StatusCode::NOT_FOUND)
-                .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
-                .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
-                .unwrap(),
         }
     }
 }
