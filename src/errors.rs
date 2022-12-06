@@ -34,8 +34,12 @@ impl IntoResponse for AppError {
             AppError::NotFound => Response::builder()
                 .status(StatusCode::NOT_FOUND)
                 .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
-                .body(boxed(Full::from(NotFoundTemplate {}.render().unwrap())))
-                .unwrap(),
+                .body(boxed(Full::from(
+                    NotFoundTemplate {}
+                        .render()
+                        .unwrap_or_else(|_| "<h1>NOT FOUND</h1>".to_string()),
+                )))
+                .unwrap_or_else(|_| (StatusCode::NOT_FOUND, "NOT FOUND").into_response()),
             AppError::InternalServerError(err) => {
                 error!("{:#}", err);
 
@@ -43,9 +47,13 @@ impl IntoResponse for AppError {
                     .status(StatusCode::INTERNAL_SERVER_ERROR)
                     .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
                     .body(boxed(Full::from(
-                        InternalServerErrorTemplate {}.render().unwrap(),
+                        InternalServerErrorTemplate {}
+                            .render()
+                            .unwrap_or_else(|_| "<h1>INTERNAL SERVER ERROR</h1>".to_string()),
                     )))
-                    .unwrap()
+                    .unwrap_or_else(|_| {
+                        (StatusCode::INTERNAL_SERVER_ERROR, "INTERNAL SERVER ERROR").into_response()
+                    })
             }
         }
     }
