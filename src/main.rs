@@ -6,7 +6,7 @@ use sqlx::SqlitePool;
 use std::{env, error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower::ServiceBuilder;
-use tower_http::{catch_panic::CatchPanicLayer, compression::CompressionLayer, trace::TraceLayer};
+use tower_http::{compression::CompressionLayer, trace::TraceLayer};
 use tracing::{debug, info};
 
 pub mod errors;
@@ -31,7 +31,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .layer(
             ServiceBuilder::new()
                 .layer(CompressionLayer::new())
-                .layer(CatchPanicLayer::new())
                 .layer(TraceLayer::new_for_http()),
         )
         .with_state(db_pool.clone());
