@@ -2,7 +2,7 @@ use minify_html::{minify, Cfg};
 use std::{error::Error, fs, process::Command};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let minify_cfg = Cfg::new();
+    let minify_cfg = Cfg::spec_compliant();
     let templates = fs::read_dir("templates/src")?;
     for template in templates {
         let template = template?;
