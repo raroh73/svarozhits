@@ -5,6 +5,7 @@ use axum::{
 use sqlx::SqlitePool;
 use std::{env, error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
+use tower::ServiceBuilder;
 use tower_http::{catch_panic::CatchPanicLayer, compression::CompressionLayer, trace::TraceLayer};
 use tracing::{debug, info};
 
@@ -27,9 +28,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/tasks/:task_id", patch(routes::mark_task_as_done))
         .route("/tasks/:task_id", delete(routes::delete_task))
         .fallback(routes::fallback)
-        .layer(CompressionLayer::new())
-        .layer(CatchPanicLayer::new())
-        .layer(TraceLayer::new_for_http())
+        .layer(
+            ServiceBuilder::new()
+                .layer(CompressionLayer::new())
+                .layer(CatchPanicLayer::new())
+                .layer(TraceLayer::new_for_http()),
+        )
         .with_state(db_pool.clone());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], svarozhits_port.parse::<u16>()?));
