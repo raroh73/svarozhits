@@ -30,8 +30,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .fallback(routes::fallback)
         .layer(
             ServiceBuilder::new()
-                .layer(CompressionLayer::new())
-                .layer(TraceLayer::new_for_http()),
+                .layer(TraceLayer::new_for_http())
+                .layer(CompressionLayer::new()),
         )
         .with_state(db_pool.clone());
 
