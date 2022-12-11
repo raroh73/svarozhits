@@ -12,7 +12,6 @@ updates:
       prefix: "chore"
     labels:
       - "priority: low"
-      - "scope: cargo"
       - "scope: dependency"
       - "status: new"
       - "type: chore"
@@ -31,7 +30,6 @@ updates:
     labels:
       - "priority: low"
       - "scope: dependency"
-      - "scope: github-action"
       - "status: new"
       - "type: chore"
     open-pull-requests-limit: 10

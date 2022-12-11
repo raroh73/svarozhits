@@ -23,6 +23,5 @@ jobs:
           pr-labels: |
             priority: low
             scope: dependency
-            scope: flake
             status: new
             type: chore
