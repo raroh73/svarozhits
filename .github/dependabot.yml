@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
-      time: "02:00"
+      time: "03:00"
     allow:
       - dependency-type: "all"
     commit-message:
@@ -23,7 +23,7 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
-      time: "02:00"
+      time: "03:00"
     allow:
       - dependency-type: "all"
     commit-message:
