@@ -2,7 +2,7 @@ use axum::{
     routing::{delete, get, patch, post},
     Router, Server,
 };
-use sqlx::{Pool, Sqlite, SqlitePool};
+use sqlx::SqlitePool;
 use std::{env, error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower::ServiceBuilder;
@@ -38,7 +38,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn get_router(db_pool: &Pool<Sqlite>) -> Router {
+fn get_router(db_pool: &SqlitePool) -> Router {
     Router::new()
         .route("/", get(routes::show_index))
         .route("/tasks", post(routes::add_task))
