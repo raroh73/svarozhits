@@ -22,14 +22,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let db_pool = SqlitePool::connect("sqlite://database.db?mode=rwc").await?;
     sqlx::migrate!("./migrations").run(&db_pool).await?;
 
-    let app = get_router(&db_pool);
-
     let addr = SocketAddr::from(([0, 0, 0, 0], svarozhits_port.parse::<u16>()?));
 
     info!("listening on {}", addr);
 
     Server::bind(&addr)
-        .serve(app.into_make_service())
+        .serve(app(&db_pool).into_make_service())
         .with_graceful_shutdown(shutdown_signal())
         .await?;
 
@@ -38,7 +36,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn get_router(db_pool: &SqlitePool) -> Router {
+fn app(db_pool: &SqlitePool) -> Router {
     Router::new()
         .route("/", get(routes::show_index))
         .route("/tasks", post(routes::add_task))
