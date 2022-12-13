@@ -2,7 +2,7 @@ use axum::{
     routing::{delete, get, patch, post},
     Router, Server,
 };
-use sqlx::SqlitePool;
+use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
 use std::{env, error::Error, net::SocketAddr};
 use tokio::signal::unix::{signal, SignalKind};
 use tower::ServiceBuilder;
@@ -19,7 +19,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     let svarozhits_port = env::var("SVAROZHITS_PORT").unwrap_or_else(|_| 8008.to_string());
 
-    let db_pool = SqlitePool::connect("sqlite://database.db?mode=rwc").await?;
+    let db_connect_options = SqliteConnectOptions::new()
+        .filename("database.db")
+        .create_if_missing(true);
+    let db_pool = SqlitePool::connect_with(db_connect_options).await?;
     sqlx::migrate!("./migrations").run(&db_pool).await?;
 
     let addr = SocketAddr::from(([0, 0, 0, 0], svarozhits_port.parse::<u16>()?));
