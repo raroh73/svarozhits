@@ -8,14 +8,14 @@ repository = "https://github.com/raroh73/svarozhits"
 license = "MIT"
 
 [dependencies]
-anyhow = "1.0.66"
+anyhow = "1.0.67"
 askama = "0.11.1"
 axum = "0.6.1"
 hex = "0.4.3"
 mime = "0.3.16"
 mime_guess = "2.0.4"
 rust-embed = "6.4.2"
-serde = { version = "1.0.149", features = ["derive"] }
+serde = { version = "1.0.151", features = ["derive"] }
 sqlx = { version = "0.6.2", features = [
     "offline",
     "runtime-tokio-rustls",
