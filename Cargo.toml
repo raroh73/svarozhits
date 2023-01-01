@@ -15,7 +15,7 @@ hex = "0.4.3"
 mime = "0.3.16"
 mime_guess = "2.0.4"
 rust-embed = "6.4.2"
-serde = { version = "1.0.151", features = ["derive"] }
+serde = { version = "1.0.152", features = ["derive"] }
 sqlx = { version = "0.6.2", features = [
     "offline",
     "runtime-tokio-rustls",
