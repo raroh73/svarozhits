@@ -32,7 +32,7 @@ tracing = "0.1.37"
 tracing-subscriber = "0.3.16"
 
 [build-dependencies]
-minify-html = "0.10.3"
+minify-html = "0.10.7"
 
 [profile.release]
 strip = true
